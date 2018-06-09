@@ -17,10 +17,10 @@ class CreateMoviesTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('director');
-            $table->string('image_url');
+            $table->string('imageUrl');
             $table->integer('duration');
-            $table->date('release_date');
-            $table->text('genres');
+            $table->date('releaseDate');
+            $table->text('genre');
             $table->timestamps();
         });
     }
