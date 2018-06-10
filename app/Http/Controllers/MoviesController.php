@@ -10,7 +10,14 @@ class MoviesController extends Controller
 {
     public function index()
     {
-        return Movie::all();
+        // return Movie::all();
+        $title = request()->input('title');
+        if ($title) {
+            return Movie::where('title', 'LIKE', '%'.$title.'%')->get();
+        } else {
+            return Movie::all();
+        }
+
     }
 
 
