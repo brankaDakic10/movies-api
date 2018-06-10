@@ -7,7 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-
+// add
+use Illuminate\Http\Request;
+//add
+use Symfony\Component\HttpFoundation\JsonResponse;
 class RegisterController extends Controller
 {
     /*
@@ -69,4 +72,32 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    public function register(Request $request){
+        $user = new User();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:3',
+            'password_confirmation' => 'required|string|min:3',
+        ]);
+    
+    
+        if ($validator->fails()) {
+            return new JsonResponse($validator->errors(), 400);
+        }
+        
+        if($request->input('password')!== $request->input('password_confirmation')){
+            return new JsonResponse([['Passwords doesnt match!']], 400);
+        }
+    
+    $user->name = $request->input('name');
+    $user->email = $request->input('email');
+    $user->password = bcrypt($request->input('password'));
+    
+    $user->save();
+    return $user;
+      
+    }
+
 }
