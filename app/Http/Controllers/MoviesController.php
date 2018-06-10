@@ -8,16 +8,21 @@ use App\Movie;
 use Validator;
 class MoviesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // return Movie::all();
-        $term = request()->input('term');
+        $skip = request()->input('skip', 0);
+        $take = request()->input('take', Movie::get()->count());
+
         
-        if ( $term ) {
-            return Movie::search($term);
+      if ($skip &&  $take) {
+            return Movie::skip($skip)->take($take)->get();
         } else {
             return Movie::all();
         }
+
+
+
 
     }
 
